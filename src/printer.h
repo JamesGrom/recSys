@@ -5,5 +5,6 @@
 
 //writes the content of all global arrays to respective text files
 void printGlobalState();
+void printResults();
 
 #endif

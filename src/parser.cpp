@@ -23,7 +23,7 @@ void synthTrainMatrix()
         source >> stringVal;
         //enter a number into the matrix and update the indexes accordingly
         trainArray[rowIndex][columnIndex] = stoi(stringVal);
-        cout << trainArray[rowIndex][columnIndex];
+        //cout << trainArray[rowIndex][columnIndex];
 
         if (columnIndex == 999)
         {

@@ -10,4 +10,6 @@
 #include "globals.h"
 #include "parser.h"
 #include "printer.h"
+double computeSimViaCoSim(int, int);
+
 #endif

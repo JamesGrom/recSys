@@ -13,4 +13,6 @@ void genUserAverageArray();
 //trainArray has been initialized
 void genMovieAverageArray();
 
+void genSimilarityArrayViaCoSim();
+
 #endif

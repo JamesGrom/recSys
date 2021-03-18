@@ -4,15 +4,29 @@
 #include <string>
 #include "generator.h"
 
+using namespace std;
 void initializer()
 {
+    //clear all append dependent logFiles
+    ofstream fileObj;
+    fileObj.open("../intermediates/computeSimViaCoSim.txt");
+    fileObj << " ";
+    fileObj.close();
+    fileObj.open("../intermediates/predictRatingViaCoSim.txt");
+    fileObj << " ";
+    fileObj.close();
+    // fileObj.open("../intermediates/");
+
     for (size_t i = 0; i < 500; i++)
     {
         UserAverageArray[i] = 0;
         for (size_t j = 0; j < 1000; j++)
         {
-            // std::cout << trainArray[i][j];
-
+            if (j < 500)
+            {
+                SimilarityArrayViaCoSim[i][j] = 0;
+                SimilarityArrayViaPC[i][j] = 0;
+            }
             trainArray[i][j] = 0;
             resCosim[i][j] = 0;
             resPC[i][j] = 0;
@@ -22,7 +36,19 @@ void initializer()
     synthTrainMatrix();
     genUserAverageArray();
     genMovieAverageArray();
-    printGlobalState();
+    genSimilarityArrayViaCoSim();
+}
+
+//generates the SimilarityArrayViaCoSim
+void genSimilarityArrayViaCoSim()
+{
+    for (int i = 0; i < 500; i++)
+    {
+        for (int j = 0; j < 500; j++)
+        {
+            SimilarityArrayViaCoSim[i][j] = computeSimViaCoSim(i, j);
+        }
+    }
 }
 
 //should be adjusted based on the average ratings given to the movies that are used in computing the user average
@@ -94,7 +120,7 @@ void genMovieAverageArray()
             if (temp != 0)
             {
                 //the user has rated the movie
-                temp = temp - UserAverageArray[j]; //perform pearson correlation correction
+                //temp = temp - UserAverageArray[j]; //perform pearson correlation correction
                 numRatings++;
                 sumRatings += temp;
             }
@@ -105,7 +131,7 @@ void genMovieAverageArray()
         if (isnan(temp))
         {
             // invalid source info , thus just use the average rating given to all movies
-            MovieAverageArray[i] = 0;
+            MovieAverageArray[i] = 3;
         }
         else
         {
