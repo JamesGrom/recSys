@@ -15,6 +15,12 @@ void initializer()
     fileObj.open("../intermediates/predictRatingViaCoSim.txt");
     fileObj << " ";
     fileObj.close();
+    fileObj.open("../intermediates/computeSimViaPC.txt");
+    fileObj << " ";
+    fileObj.close();
+    fileObj.open("../intermediates/predictRatingViaPC.txt");
+    fileObj << " ";
+    fileObj.close();
     // fileObj.open("../intermediates/");
 
     for (size_t i = 0; i < 500; i++)
@@ -47,6 +53,18 @@ void genSimilarityArrayViaCoSim()
         for (int j = 0; j < 500; j++)
         {
             SimilarityArrayViaCoSim[i][j] = computeSimViaCoSim(i, j);
+        }
+    }
+}
+
+//generates the similarity ArrayViaPC
+void genSimilarityArrayViaPC()
+{
+    for (int i = 0; i < 500; i++)
+    {
+        for (int j = 0; j < 500; j++)
+        {
+            SimilarityArrayViaPC[i][j] = computeSimViaPC(i, j);
         }
     }
 }
