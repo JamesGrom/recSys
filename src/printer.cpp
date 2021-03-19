@@ -196,4 +196,110 @@ void printResults()
             }
         }
     }
+
+    srcFile.close();
+    destFile.close();
+    srcFile.open("../data/test5.txt");
+    destFile.open("../res/res5pc.txt");
+    counter = 0;
+    while (!srcFile.eof())
+    {
+        srcFile >> stringVal;
+        counter++;
+        if (counter == 1)
+        {
+            userIndex = stoi(stringVal);
+            destFile << userIndex << "\t";
+        }
+        else if (counter == 2)
+        {
+            movieIndex = stoi(stringVal);
+            destFile << movieIndex << "\t";
+        }
+        else if (counter == 3)
+        {
+            counter = 0;
+            ratingValue = stoi(stringVal);
+            if (ratingValue == 0)
+            {
+                //write the predicted value to the result file
+                destFile << resPC[userIndex - 1][movieIndex - 1] << "\n";
+            }
+            else
+            {
+                //simply copy the rating value to the destfile
+                destFile << ratingValue << "\n";
+            }
+        }
+    }
+    srcFile.close();
+    destFile.close();
+    srcFile.open("../data/test10.txt");
+    destFile.open("../res/res10pc.txt");
+    counter = 0;
+    while (!srcFile.eof())
+    {
+        srcFile >> stringVal;
+        counter++;
+        if (counter == 1)
+        {
+            userIndex = stoi(stringVal);
+            destFile << userIndex << "\t";
+        }
+        else if (counter == 2)
+        {
+            movieIndex = stoi(stringVal);
+            destFile << movieIndex << "\t";
+        }
+        else if (counter == 3)
+        {
+            counter = 0;
+            ratingValue = stoi(stringVal);
+            if (ratingValue == 0)
+            {
+                //write the predicted value to the result file
+                destFile << resPC[userIndex - 1][movieIndex - 1] << "\n";
+            }
+            else
+            {
+                //simply copy the rating value to the destfile
+                destFile << ratingValue << "\n";
+            }
+        }
+    }
+    srcFile.close();
+    destFile.close();
+    srcFile.open("../data/test20.txt");
+    destFile.open("../res/res20pc.txt");
+    counter = 0;
+    while (!srcFile.eof())
+    {
+        srcFile >> stringVal;
+        counter++;
+        if (counter == 1)
+        {
+            userIndex = stoi(stringVal);
+            destFile << userIndex << "\t";
+        }
+        else if (counter == 2)
+        {
+            movieIndex = stoi(stringVal);
+            destFile << movieIndex << "\t";
+        }
+        else if (counter == 3)
+        {
+            counter = 0;
+            ratingValue = stoi(stringVal);
+            if (ratingValue == 0)
+            {
+                //write the predicted value to the result file
+                destFile << resPC[userIndex - 1][movieIndex - 1] << "\n";
+            }
+            else
+            {
+                //simply copy the rating value to the destfile
+                destFile << ratingValue << "\n";
+            }
+        }
+    }
 }

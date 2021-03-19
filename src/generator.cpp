@@ -43,6 +43,7 @@ void initializer()
     genUserAverageArray();
     genMovieAverageArray();
     genSimilarityArrayViaCoSim();
+    genSimilarityArrayViaPC();
 }
 
 //generates the SimilarityArrayViaCoSim
@@ -57,7 +58,7 @@ void genSimilarityArrayViaCoSim()
     }
 }
 
-//generates the similarity ArrayViaPC
+//generates the SimilarityArrayViaPC
 void genSimilarityArrayViaPC()
 {
     for (int i = 0; i < 500; i++)
@@ -68,6 +69,18 @@ void genSimilarityArrayViaPC()
         }
     }
 }
+
+// //generates the similarity ArrayViaPC
+// void genSimilarityArrayViaPC()
+// {
+//     for (int i = 0; i < 500; i++)
+//     {
+//         for (int j = 0; j < 500; j++)
+//         {
+//             SimilarityArrayViaPC[i][j] = computeSimViaPC(i, j);
+//         }
+//     }
+// }
 
 //should be adjusted based on the average ratings given to the movies that are used in computing the user average
 void genUserAverageArray()

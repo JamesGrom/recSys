@@ -11,5 +11,5 @@
 #include "parser.h"
 #include "printer.h"
 double computeSimViaCoSim(int, int);
-
+double computeSimViaPC(int, int);
 #endif
