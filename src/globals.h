@@ -32,6 +32,7 @@ extern double IUFArray[1000];
 //similarity between user i and user j
 extern double SimilarityArrayViaCoSim[500][500];
 extern double SimilarityArrayViaPC[500][500];
+extern double SimilarityArrayViaItemBased[1000][1000];
 
 //holds the prediction results for the appropriate algorithm
 //same indexing systems as the trainArray
@@ -39,5 +40,6 @@ extern double SimilarityArrayViaPC[500][500];
 
 extern int resCosim[500][1000];
 extern int resPC[500][1000];
+extern int resItemBased[500][1000];
 
 #endif

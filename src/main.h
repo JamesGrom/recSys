@@ -12,4 +12,7 @@
 #include "printer.h"
 double computeSimViaCoSim(int, int);
 double computeSimViaPC(int, int);
+double computeSimBetweenMovies(int, int);
+double amplify(double);
+
 #endif

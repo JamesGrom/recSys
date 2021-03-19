@@ -45,6 +45,7 @@ void initializer()
     genIUFArray();
     genSimilarityArrayViaCoSim();
     genSimilarityArrayViaPC();
+    genSimilarityArrayViaItemBased();
 }
 
 //generates the SimilarityArrayViaCoSim
@@ -67,6 +68,18 @@ void genSimilarityArrayViaPC()
         for (int j = 0; j < 500; j++)
         {
             SimilarityArrayViaPC[i][j] = computeSimViaPC(i, j);
+        }
+    }
+}
+
+//generates the SimilarityArrayViaItemBased
+void genSimilarityArrayViaItemBased()
+{
+    for (int i = 0; i < 1000; i++)
+    {
+        for (int j = 0; j < 1000; j++)
+        {
+            SimilarityArrayViaItemBased[i][j] = computeSimBetweenMovies(i, j);
         }
     }
 }

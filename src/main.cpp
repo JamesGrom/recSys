@@ -5,8 +5,10 @@ double MovieAverageArray[1000];
 double IUFArray[1000];
 int resCosim[500][1000];
 int resPC[500][1000];
+int resItemBased[500][1000];
 double SimilarityArrayViaCoSim[500][500];
 double SimilarityArrayViaPC[500][500];
+double SimilarityArrayViaItemBased[1000][1000];
 
 #include <string>
 #include <cstdlib>
@@ -114,6 +116,54 @@ double computeSimViaPC(int u1, int u2)
     logFile.close();
     return similarity;
 }
+
+//returns the similarity between the respective movies
+double computeSimBetweenMovies(int m1, int m2)
+{
+    int dimensionality = 0;
+    double dotProd = 0;
+    double intermediate1 = 0;
+    double intermediate2 = 0;
+    double intermediate = 0;
+    double Denominator;
+    double similarity;
+    double discrim1 = 0;
+    double discrim2 = 0;
+    ofstream logFile;
+    logFile.open("../intermediates/computeSimBetweenMovies.txt", ios::app);
+    logFile << "Sim(" << m1 << "," << m2 << ") = ";
+    for (int i = 0; i < 200; i++)
+    {
+        if (trainArray[i][m1] != 0 && trainArray[i][m2] != 0)
+        {
+            dimensionality++;
+            intermediate1 = (trainArray[i][m1] - UserAverageArray[i]);
+            intermediate2 = (trainArray[i][m2] - UserAverageArray[i]);
+            discrim1 += intermediate1 * intermediate1;
+            discrim2 += intermediate2 * intermediate2;
+            dotProd += intermediate1 * intermediate2;
+        }
+    }
+
+    Denominator = sqrt(discrim1) * sqrt(discrim2);
+    if (dimensionality == 0)
+    {
+        logFile << " 0 (no users have rated both movies) \n";
+        logFile.close();
+        return 0;
+    }
+    similarity = dotProd / Denominator;
+    if (isnan(similarity))
+    {
+        logFile << "0 --- nan ---- dotProd = " << dotProd << " Denominator = " << Denominator << " with dimensionality = " << dimensionality << endl;
+        logFile.close();
+        return 0;
+    }
+
+    logFile << similarity << " with dimensionality = " << dimensionality << endl;
+    logFile.close();
+    return similarity;
+}
 //SimilarityArrayViaCoSim must be computed before calling here
 int predictRatingViaCoSim(int userIndex, int movieIndex)
 {
@@ -177,7 +227,10 @@ int predictRatingViaCoSim(int userIndex, int movieIndex)
 //SimilarityArrayViaPC must be computed before calling here
 int predictRatingViaPC(int userIndex, int movieIndex)
 {
+    double K = 0.05;
+    double negK = -0.05;
     double tempSim = 0;
+    double amplifiedTemp;
     double Numerator = 0;
     double Denominator = 0;
     double NumUsersCompairedTo = 0;
@@ -189,7 +242,6 @@ int predictRatingViaPC(int userIndex, int movieIndex)
     {
         if (trainArray[i][movieIndex] != 0)
         {
-            NumUsersCompairedTo++;
             tempSim = SimilarityArrayViaPC[userIndex][i];
             if (tempSim != SimilarityArrayViaPC[i][userIndex])
             {
@@ -198,19 +250,94 @@ int predictRatingViaPC(int userIndex, int movieIndex)
 
             if (tempSim < 0)
             {
-                Denominator -= tempSim;
+                if (amplify(tempSim) < negK)
+                {
+                    NumUsersCompairedTo++;
+                    Denominator -= tempSim;
+                    Numerator += tempSim * (trainArray[i][movieIndex] - UserAverageArray[i]);
+                }
             }
             else
             {
-                Denominator += tempSim;
+                if (amplify(tempSim) > K)
+                {
+                    NumUsersCompairedTo++;
+                    Denominator += tempSim;
+                    Numerator += tempSim * (trainArray[i][movieIndex] - UserAverageArray[i]);
+                }
             }
-            Numerator += tempSim * (trainArray[i][movieIndex] - UserAverageArray[i]);
         }
     }
     if (NumUsersCompairedTo == 0 || Denominator == 0)
     {
         logFile << " --no valid users to compair to / or Denominator = 0 -- ";
         predVal = MovieAverageArray[movieIndex];
+    }
+    else
+    {
+        predVal = (Numerator / Denominator) + UserAverageArray[userIndex];
+    }
+    if (predVal < 1.5)
+    {
+        predVal = 1;
+    }
+    else if (predVal < 2.5)
+    {
+        predVal = 2;
+    }
+    else if (predVal < 3.5)
+    {
+        predVal = 3;
+    }
+    else if (predVal < 4.5)
+    {
+        predVal = 4;
+    }
+    else
+    {
+        predVal = 5;
+    }
+    logFile << predVal << endl;
+    logFile.close();
+    return predVal;
+}
+
+//SimilarityArrayViaItemBased must be computed before calling here
+int predidictRatingViaItemBased(int userIndex, int movieIndex)
+{
+    double tempSim = 0;
+    double Numerator = 0;
+    double Denominator = 0;
+    double NumMoviesCompaired = 0;
+    double predVal;
+    ofstream logFile;
+    logFile.open("../intermediates/predictRatingViaItemBased.txt", ios::app);
+    logFile << "rating(" << userIndex << "," << movieIndex << ") = ";
+    for (int i = 0; i < 1000; i++)
+    {
+        if (trainArray[userIndex][i] != 0)
+        {
+            NumMoviesCompaired++;
+            tempSim = SimilarityArrayViaItemBased[movieIndex][i];
+            if (tempSim != SimilarityArrayViaItemBased[i][movieIndex])
+            {
+                logFile << "ERROR WITH ASSOCIATIVITY OF SimilarityArrayViaItemBased\n";
+            }
+            if (tempSim < 0)
+            {
+                Denominator -= tempSim;
+            }
+            else
+            {
+                Denominator += tempSim;
+            }
+            Numerator += tempSim * (trainArray[userIndex][i] - UserAverageArray[userIndex]);
+        }
+    }
+    if (NumMoviesCompaired == 0 || Denominator == 0)
+    {
+        logFile << " --no valid users to compair to / or Denominator = 0 -- ";
+        predVal = predictRatingViaPC(userIndex, movieIndex); //MovieAverageArray[movieIndex];
     }
     else
     {
@@ -267,12 +394,42 @@ void runPC()
         }
     }
 }
+
+void runItemBased()
+{
+    int temp;
+    for (int i = 0; i < 500; i++)
+    {
+        for (int j = 0; j < 1000; j++)
+        {
+            temp = predidictRatingViaItemBased(i, j);
+            resItemBased[i][j] = temp;
+        }
+    }
+}
+
+double amplify(double inputWeight)
+{
+    double magnitude;
+    if (inputWeight < 0)
+    {
+        magnitude = -1.0 * inputWeight;
+    }
+    else
+    {
+        magnitude = inputWeight;
+    }
+    magnitude = pow(magnitude, 2.5);
+    // std::cout << inputWeight * magnitude << endl;
+    return inputWeight * magnitude;
+}
 int main()
 {
     initializer();
     //run the prediction algorithms
     runCoSim();
     runPC();
+    runItemBased();
     printGlobalState();
     printResults();
 }
