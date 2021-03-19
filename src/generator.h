@@ -15,5 +15,6 @@ void genMovieAverageArray();
 
 void genSimilarityArrayViaCoSim();
 void genSimilarityArrayViaPC();
+void genIUFArray();
 
 #endif

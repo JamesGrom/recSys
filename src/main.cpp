@@ -2,6 +2,7 @@
 int trainArray[500][1000];
 double UserAverageArray[500];
 double MovieAverageArray[1000];
+double IUFArray[1000];
 int resCosim[500][1000];
 int resPC[500][1000];
 double SimilarityArrayViaCoSim[500][500];
@@ -85,8 +86,9 @@ double computeSimViaPC(int u1, int u2)
     {
         if (trainArray[u1][i] != 0 && trainArray[u2][i] != 0)
         {
-            intermediate1 = trainArray[u1][i] - UserAverageArray[u1];
-            intermediate2 = trainArray[u2][i] - UserAverageArray[u2];
+            logFile << "(iuf factor = " << IUFArray[i] << ") ";
+            intermediate1 = IUFArray[i] * (trainArray[u1][i] - UserAverageArray[u1]);
+            intermediate2 = IUFArray[i] * (trainArray[u2][i] - UserAverageArray[u2]);
             discrim1 += intermediate1 * intermediate1;
             discrim2 += intermediate2 * intermediate2;
             dotProd += intermediate1 * intermediate2;

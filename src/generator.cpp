@@ -42,6 +42,7 @@ void initializer()
     synthTrainMatrix();
     genUserAverageArray();
     genMovieAverageArray();
+    genIUFArray();
     genSimilarityArrayViaCoSim();
     genSimilarityArrayViaPC();
 }
@@ -70,17 +71,24 @@ void genSimilarityArrayViaPC()
     }
 }
 
-// //generates the similarity ArrayViaPC
-// void genSimilarityArrayViaPC()
-// {
-//     for (int i = 0; i < 500; i++)
-//     {
-//         for (int j = 0; j < 500; j++)
-//         {
-//             SimilarityArrayViaPC[i][j] = computeSimViaPC(i, j);
-//         }
-//     }
-// }
+//generates the IUFArray
+void genIUFArray()
+{
+    double numRatings;
+    double numUsers = 200.0;
+    for (int i = 0; i < 1000; i++)
+    {
+        numRatings = 0;
+        for (int j = 0; j < 200; j++)
+        {
+            if (trainArray[j][i] != 0)
+            {
+                numRatings++;
+            }
+        }
+        IUFArray[i] = log((numRatings / numUsers));
+    }
+}
 
 //should be adjusted based on the average ratings given to the movies that are used in computing the user average
 void genUserAverageArray()

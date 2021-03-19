@@ -26,6 +26,8 @@ extern double UserAverageArray[500];
 // holds the pearson correlated movie's average score
 extern double MovieAverageArray[1000];
 
+//floating point values holding the IUF factor for a given Movie
+extern double IUFArray[1000];
 //holds the similarity scores between users calculated via the referenced method
 //similarity between user i and user j
 extern double SimilarityArrayViaCoSim[500][500];
